@@ -1,2 +1,3 @@
-# js-game-of-life
-Conway's Game of Life
+# Conway's Game of Life
+Created in HTML5 + JavaScript
+
