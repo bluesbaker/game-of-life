@@ -1,0 +1,92 @@
+body {
+    display: flex;
+    color: #000;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.game-block {
+    display: flex;
+    position: relative;
+    flex-grow: 1;
+    background: rgb(155, 0, 220);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.game-block::before {
+    top: 0;
+    content: '';
+    background: linear-gradient(rgb(70, 0, 120), rgb(155, 0, 220));
+    width: 100%;
+    height: 100%;
+}
+
+.options-block {
+    display: flex;
+    padding: 20px;
+    color: #fff;
+    background: #222;
+    flex-direction: column;
+}
+
+.layout {
+    position: absolute;
+}
+
+#gameLayout {
+    z-index: 1;
+}
+
+#overlapLayout {
+    z-index: 2;
+}
+
+input {
+    height: 40px;
+    border-radius: 5px;
+    margin: 5px 0px;
+    border: 1px solid #999;
+}
+
+.field {
+    text-transform: uppercase;
+    padding: 0px 10px;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    outline-style: none;
+}
+
+.field:invalid {
+    background: linear-gradient(rgb(192, 71, 97), rgb(255, 108, 140));
+    color: #fff;
+}
+
+.btn {
+    border: 0px;
+    cursor: pointer;
+    transition: all 1s;
+    margin: 2px 0px;
+    color: #fff;
+    background: linear-gradient(-45deg, rgb(70, 0, 120), rgb(155, 0, 220));
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.btn[value='BUILD'] {
+    margin-bottom: 15px;
+    background: linear-gradient(-45deg, rgb(206, 117, 0), rgb(223, 171, 1));
+}
+
+.btn[value='START'] {
+    background: linear-gradient(-45deg, rgb(103, 114, 2), rgb(150, 200, 0));
+}
+
+.btn[value='PAUSE'] {
+    background: linear-gradient(-45deg, rgb(192, 71, 97), rgb(255, 108, 140));
+}
