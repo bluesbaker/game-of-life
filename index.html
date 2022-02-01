@@ -10,19 +10,26 @@
 </head>
 <body>
     <!-- GAME -->
-    <div class="game-block">
+    <article class="game-block">
         <canvas class="layout" id="overlapLayout"></canvas>
         <canvas class="layout" id="gameLayout"></canvas>
         <canvas class="layout" id="gridLayout"></canvas>
-    </div>
+    </article>
 
     <!-- OPTION -->
-    <div class="options-block">
-        <input class="field" type="text" value="100" id="sizeInput" placeholder="grid size" required>
-        <input class="btn" type="button" value="BUILD" id="buildButton">
-
-        <input class="btn" type="button" value="START" id="startButton">
-        <input class="btn" type="button" value="CLEAR" id="clearButton">
+    <div class="right-bar">
+        <article class="title-block">
+            Game of Life
+        </article>    
+        <article class="options-block">
+            <input class="field" type="text" value="100" id="sizeInput" placeholder="grid size" required>
+            <input class="btn" type="button" value="BUILD" id="buildButton">
+            <input class="btn" type="button" value="START" id="startButton">
+            <input class="btn" type="button" value="CLEAR" id="clearButton">
+        </article>
+        <footer class="footer-block">
+            <a href="https://github.com/bluesbaker/js-game-of-life">GITHUB</a>
+        </footer>
     </div>
 
     <!-- GAME SCRIPT -->
