@@ -161,8 +161,6 @@ function inputSize(element) {
     else {
         buildButton.disabled = false;
     }
-
-    console.log('asd')
 }
 
 function startGame() {
