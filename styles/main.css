@@ -24,11 +24,38 @@ body {
     height: 100%;
 }
 
+.right-bar {
+    display: flex;
+    flex-direction: column;  
+    background: #222;
+    text-align: center;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.title-block {
+    flex-grow: 0;
+    padding: 20px;
+    font-size: 130%;
+}
+
+.footer-block {
+    flex-grow: 0;
+    padding: 20px;
+    background: #444;
+}
+
+.footer-block a {
+    color: rgb(223, 171, 1);
+    text-decoration: none;
+}
+
 .options-block {
+    flex-grow: 1;
     display: flex;
     padding: 20px;
+    padding-top: 0px;
     color: #fff;
-    background: #222;
     flex-direction: column;
 }
 
@@ -54,7 +81,6 @@ input {
 .field {
     text-transform: uppercase;
     padding: 0px 10px;
-    margin-top: 5px;
     margin-bottom: 2px;
     outline-style: none;
 }
