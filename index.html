@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=800, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles/main.css">
+    <title>Game of Life</title>
+</head>
+<body>
+    <!-- GAME -->
+    <div class="game-block">
+        <canvas class="layout" id="overlapLayout"></canvas>
+        <canvas class="layout" id="gameLayout"></canvas>
+        <canvas class="layout" id="gridLayout"></canvas>
+    </div>
+
+    <!-- OPTION -->
+    <div class="options-block">
+        <input class="field" type="text" value="100" id="sizeInput" placeholder="grid size" required>
+        <input class="btn" type="button" value="BUILD" id="buildButton">
+
+        <input class="btn" type="button" value="START" id="startButton">
+        <input class="btn" type="button" value="CLEAR" id="clearButton">
+    </div>
+
+    <!-- GAME SCRIPT -->
+    <script src="js/scripts.js"></script>
+</body>
+</html>
