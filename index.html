@@ -27,12 +27,32 @@
             <input class="btn" type="button" value="START" id="startButton">
             <input class="btn" type="button" value="CLEAR" id="clearButton">
         </article>
+        <article class="tools-block">
+            <div class="tools-line">
+                <input class="btn" type="button" value="Randomize" id="randomizeButton">
+            </div>
+            <div class="tools-line">
+                <button class="btn pattern" data-pattern-checked="true" data-paint-pattern="0,0"></button> 
+                <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;0,-1;0,1"></button>
+                <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;-1,0;1,0"></button>
+            </div>
+            <div class="tools-line">
+                <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;-1,-1;1,1"></button> 
+                <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;-1,0;1,0;0,-1;0,1"></button>
+                <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;-1,1;1,-1"></button>
+            </div>
+            <div class="tools-line">
+                <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="-1,0;1,0"></button> 
+                <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;-1,-1;-1,1;1,-1;1,1"></button>
+                <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,-1;0,1"></button>
+            </div>
+        </article>
         <footer class="footer-block">
             <a href="https://github.com/bluesbaker/js-game-of-life">GITHUB</a>
         </footer>
     </div>
 
-    <!-- GAME SCRIPT -->
+    <!-- GAME SCRIPTS -->
     <script src="js/scripts.js"></script>
 </body>
 </html>
