@@ -23,6 +23,10 @@ let buildButton = document.getElementById('buildButton');
 let startButton = document.getElementById('startButton');
 let clearButton = document.getElementById('clearButton');
 
+// tools
+let randomizeButton = document.getElementById('randomizeButton');
+let patternButtons = [...document.getElementsByClassName('pattern')];
+
 // canvas layouts
 let overlapLayout = document.getElementById('overlapLayout');
 let gameLayout = document.getElementById('gameLayout');
@@ -44,6 +48,7 @@ let nextGenerationMasks = null;
 let isMouseInput = false;
 let gridSize = 0;
 let cellSize = 0;
+let paintPattern = [[0,0]];
 
 // mouse actions of game layout
 // 'overlapLayout' - is a upper layout 
@@ -52,14 +57,19 @@ overlapLayout.onmouseup = onMouseUp;
 overlapLayout.onmousemove = onMouseMove;
 overlapLayout.onmouseleave = onMouseLeave;
 
-// input actions
+// options actions
 sizeInput.oninput = inputSize;
 buildButton.onmouseup = init;
 startButton.onmouseup = startGame;
 clearButton.onmouseup = clearMatrix;
 
+// tools actions
+randomizeButton.onmouseup = randomizeMatrix;
+patternButtons.map((b) => b.onmouseup = setPaintPattern);
+
 // window action
 window.onresize = init; 
+window.addEventListener('DOMContentLoaded', loadTools);
 
 // the first initialization
 init();
@@ -150,8 +160,8 @@ function drawMatrix() {
     }
 }
 
-function inputSize(element) {
-    let input = element.target;
+function inputSize(event) {
+    let input = event.target;
     let regex = /[^+\d]/g;   
     input.value = input.value.replace(regex, '');
 
@@ -208,25 +218,37 @@ function onMouseUp() {
     isMouseInput = false;
 }  
 
-function onMouseDown(element) {
+function onMouseDown(event) {
     isMouseInput = true;
     // painting at the first click
-    onMouseMove(element);
+    onMouseMove(event);
 }  
 
-function onMouseMove(element) {
-    let position = getCorrectPosition(element);
+function onMouseMove(event) {
+    let position = getCorrectPosition(event);
 
     if(isMouseInput && gameId == null) {
-        cellMatrix[position.x][position.y].isDead = false;
-        nextGenerationMasks[position.x][position.y] = false;
-        cellMatrix[position.x][position.y].draw();
+        for(let i = 0; i < paintPattern.length; i++) {
+            let xCoord = position.x + paintPattern[i][0];
+            let yCoord = position.y + paintPattern[i][1];
+
+            let mirrorCoords = getMirrorCoords(xCoord, yCoord);
+            addCell(mirrorCoords.x, mirrorCoords.y);       
+        }
     }  
     else {
         let overlapContext = overlapLayout.getContext('2d');
-        let possibleCell = new Cell(overlapContext, 'rgb(255, 255, 255, 0.5)', position.x * cellSize, position.y * cellSize, cellSize, cellSize);
         overlapContext.clearRect(0, 0, overlapLayout.width, overlapLayout.height);
-        possibleCell.draw();
+
+        for(let i = 0; i < paintPattern.length; i++) {
+            let xCoord = position.x + paintPattern[i][0];
+            let yCoord = position.y + paintPattern[i][1];
+            let mirrorCoords = getMirrorCoords(xCoord, yCoord);
+
+            let possibleCell = new Cell(overlapContext, 'rgb(255, 255, 255, 0.5)', mirrorCoords.x * cellSize, mirrorCoords.y * cellSize, cellSize, cellSize);
+            possibleCell.draw();       
+        }
+
     }            
 }
 
@@ -235,9 +257,9 @@ function onMouseLeave() {
     onMouseUp();
 }
 
-function getCorrectPosition(element) {
-    let mouseX = element.pageX - element.target.offsetLeft + gameBlock.scrollLeft;
-    let mouseY = element.pageY - element.target.offsetTop + gameBlock.scrollTop;
+function getCorrectPosition(event) {
+    let mouseX = event.pageX - event.target.offsetLeft + gameBlock.scrollLeft;
+    let mouseY = event.pageY - event.target.offsetTop + gameBlock.scrollTop;
     let cellX = Math.floor((((mouseX + overlapLayout.width) / overlapLayout.width) - 1) * gridSize);
     let cellY = Math.floor((((mouseY + overlapLayout.height) / overlapLayout.height) - 1) * gridSize);
 
@@ -258,11 +280,9 @@ function getNeighbourCount(xPosition, yPosition) {
         for(let y = yPosition - 1; y <= yPosition + 1; y++) {
             if(xPosition == x && yPosition == y) continue;
 
-            // correct a mirror coords
-            let correctX = (x < 0) ? (cellMatrix.length - 1) : (x > cellMatrix.length - 1) ? 0 : x;
-            let correctY = (y < 0) ? (cellMatrix[0].length - 1) : (y > cellMatrix[0].length - 1) ? 0 : y;
+            let mirrorCoords = getMirrorCoords(x, y);
 
-            if(!cellMatrix[correctX][correctY].isDead) count++;
+            if(!cellMatrix[mirrorCoords.x][mirrorCoords.y].isDead) count++;
         }
     }
 
@@ -297,6 +317,81 @@ function getNextGenerationMasks() {
                     }
                 }
             }
+        }
+    }
+}
+
+function getMirrorCoords(xCoord, yCoord) {
+    // correct a mirror coords
+    let correctX = (xCoord < 0) ? (cellMatrix.length - 1) : (xCoord > cellMatrix.length - 1) ? 0 : xCoord;
+    let correctY = (yCoord < 0) ? (cellMatrix[0].length - 1) : (yCoord > cellMatrix[0].length - 1) ? 0 : yCoord;
+
+    return {
+        x: correctX,
+        y: correctY
+    }
+}
+
+function addCell(positionX, positionY) {
+    cellMatrix[positionX][positionY].isDead = false;
+    nextGenerationMasks[positionX][positionY] = false;
+    cellMatrix[positionX][positionY].draw();
+}
+
+function loadTools(event) {
+    for(let i = 0; i < patternButtons.length; i++) {
+        let button = patternButtons[i];
+        let pattern = parsePattern(button.getAttribute("data-paint-pattern"));
+
+        if(Array.isArray(pattern)) {
+            let svgIcon = patternToSVG(21, '#ffffff', pattern);
+            button.appendChild(svgIcon);
+        }       
+    }
+}
+
+function parsePattern(dataPattern) {
+    return dataPattern.split(';').map(pc => pc.split(',').map(sc => +sc));
+}
+
+function patternToSVG(size = 24, color = '#ffffff', path) {
+    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    let iconCellSize = size / 3;
+    let centerCell = { x: iconCellSize, y: iconCellSize }
+
+    svg.setAttribute("aria-hidden","true");
+    svg.setAttribute('viewbox', `0 0 ${size} ${size}`);
+    svg.setAttribute('width', size + 'px');
+    svg.setAttribute('height', size + 'px');
+
+    for(let i = 0; i < path.length; i++) {
+        let rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+
+        rect.setAttribute('x', centerCell.x + (path[i][0] * iconCellSize));
+        rect.setAttribute('y', centerCell.y + (path[i][1] * iconCellSize));
+        rect.setAttribute('width', iconCellSize);
+        rect.setAttribute('height', iconCellSize);
+        rect.setAttribute('fill', color);   
+
+        svg.appendChild(rect);
+    }
+
+    return svg;
+}
+
+function setPaintPattern(event) {
+    let attrPattern = event.currentTarget.getAttribute('data-paint-pattern');    
+
+    paintPattern = parsePattern(attrPattern);
+    patternButtons.map((b) => b.setAttribute('data-pattern-checked', false));
+    event.currentTarget.setAttribute('data-pattern-checked', true);
+}
+
+function randomizeMatrix() {
+    clearMatrix();
+    for(let x = 0; x < cellMatrix.length; x++) {
+        for(let y = 0; y < cellMatrix[x].length; y++) {
+            !!Math.floor(Math.random() * 2) && addCell(x, y);
         }
     }
 }
