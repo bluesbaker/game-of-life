@@ -1,3 +1,7 @@
+:root {
+    --input-size: 50px;
+}
+
 body {
     display: flex;
     color: #000;
@@ -50,13 +54,25 @@ body {
     text-decoration: none;
 }
 
-.options-block {
-    flex-grow: 1;
+.options-block, .tools-block {
     display: flex;
     padding: 20px;
     padding-top: 0px;
     color: #fff;
     flex-direction: column;
+}
+
+.tools-block {
+    flex-grow: 1;
+}
+
+.tools-line {
+    display: flex;
+    gap: 5px;
+}
+
+.tools-line .pattern.active {
+    background: linear-gradient(-45deg, rgb(206, 117, 0), rgb(223, 171, 1));
 }
 
 .layout {
@@ -71,15 +87,22 @@ body {
     z-index: 2;
 }
 
-input {
-    height: 40px;
+.field, .btn {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 5px;
     margin: 5px 0px;
     border: 1px solid #999;
+    text-transform: uppercase;
+    height: var(--input-size);
+    max-width: calc((var(--input-size) * 3) + (5px * 2));
+    min-width: var(--input-size);
+    box-sizing: border-box;
 }
 
 .field {
-    text-transform: uppercase;
     padding: 0px 10px;
     margin-bottom: 2px;
     outline-style: none;
@@ -94,7 +117,7 @@ input {
     border: 0px;
     cursor: pointer;
     transition: all 1s;
-    margin: 2px 0px;
+    margin: 2.5px 0px;
     color: #fff;
     background: linear-gradient(-45deg, rgb(70, 0, 120), rgb(155, 0, 220));
 }
@@ -105,7 +128,6 @@ input {
 }
 
 .btn[value='BUILD'] {
-    margin-bottom: 15px;
     background: linear-gradient(-45deg, rgb(206, 117, 0), rgb(223, 171, 1));
 }
 
@@ -115,4 +137,8 @@ input {
 
 .btn[value='PAUSE'] {
     background: linear-gradient(-45deg, rgb(192, 71, 97), rgb(255, 108, 140));
+}
+
+.btn[data-pattern-checked=true] {
+    background: linear-gradient(-45deg, rgb(206, 117, 0), rgb(223, 171, 1));
 }
