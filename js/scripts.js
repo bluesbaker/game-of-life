@@ -1,12 +1,21 @@
 class Cell {
-    constructor(context, color, x, y, width, height) {
+    constructor(context, x, y, width, height, color = null) {
         this.context = context;
-        this.color = color;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.isDead = false;
+        this.color = color;
+        
+        // if color is null then let's go to the party
+        if(this.color == null) {
+            let contextWidth = this.context.canvas.width;
+            let contextHeight = this.context.canvas.height;
+            let green = Math.floor(Math.abs(Math.sin(this.x * Math.PI / contextWidth) * (255 - 150) + 150));  
+            let red = Math.floor(Math.abs(Math.sin(this.y * Math.PI / contextHeight) * (255 - 150) + 150)); 
+            this.color = `rgb(${red}, ${green}, 255)`;
+        }
     }
 
     draw() {
@@ -123,7 +132,7 @@ function initMatrix() {
 
         // init matrix
         for(let y = 0; y < cellMatrix[x].length; y++) {
-            let cell = new Cell(gameContext, '#fff', x * cellSize, y * cellSize, cellSize, cellSize);
+            let cell = new Cell(gameContext, x * cellSize, y * cellSize, cellSize, cellSize);
             cell.isDead = true;
             cellMatrix[x][y] = cell;
         }
@@ -142,6 +151,7 @@ function drawGrid() {
         gridContext.closePath();
         gridContext.stroke();
     }
+
     // vertical lines
     for(let y = 0; y < gridSize; y++) {
         gridContext.strokeStyle = strokeColor;
@@ -163,9 +173,7 @@ function drawMatrix() {
 }
 
 function inputSize(event) {
-    let input = event.target;
-    let regex = /[^+\d]/g;   
-    input.value = input.value.replace(regex, '');
+    input.value = event.target.value.replace(/[^+\d]/g, '');
 }
 
 function startGame() {
@@ -190,7 +198,7 @@ function clearMatrix() {
     }
 
     // init new matrix
-    initMatrix();
+    initMatrix();   
 
     // init new masks
     initMasks();
@@ -206,6 +214,7 @@ function gameLoop() {
     // clear game layout
     gameContext.clearRect(0, 0, gameLayout.width, gameLayout.height);
 
+    // draw updated matrix
     drawMatrix();
 }
 
@@ -222,28 +231,28 @@ function onMouseDown(event) {
 function onMouseMove(event) {
     let position = getCorrectPosition(event);
 
+    // if mouse down then add cell
     if(isMouseInput && gameId == null) {
         for(let i = 0; i < paintPattern.length; i++) {
-            let xCoord = position.x + paintPattern[i][0];
-            let yCoord = position.y + paintPattern[i][1];
-
-            let mirrorCoords = getMirrorCoords(xCoord, yCoord);
+            let mirrorCoords = getMirrorCoords(position.x + paintPattern[i][0], position.y + paintPattern[i][1]);           
             addCell(mirrorCoords.x, mirrorCoords.y);       
         }
-    }  
+    }
+    // ...or draw preview 
     else {
-        let overlapContext = overlapLayout.getContext('2d');
         overlapContext.clearRect(0, 0, overlapLayout.width, overlapLayout.height);
-
         for(let i = 0; i < paintPattern.length; i++) {
-            let xCoord = position.x + paintPattern[i][0];
-            let yCoord = position.y + paintPattern[i][1];
-            let mirrorCoords = getMirrorCoords(xCoord, yCoord);
-
-            let possibleCell = new Cell(overlapContext, 'rgb(255, 255, 255, 0.5)', mirrorCoords.x * cellSize, mirrorCoords.y * cellSize, cellSize, cellSize);
+            let color = 'rgb(255, 255, 255, 0.5)';
+            let mirrorCoords = getMirrorCoords(position.x + paintPattern[i][0], position.y + paintPattern[i][1]);
+            let possibleCell = new Cell(
+                overlapContext, 
+                mirrorCoords.x * cellSize, 
+                mirrorCoords.y * cellSize, 
+                cellSize, 
+                cellSize,
+                color);           
             possibleCell.draw();       
         }
-
     }            
 }
 
@@ -276,7 +285,6 @@ function getNeighbourCount(xPosition, yPosition) {
             if(xPosition == x && yPosition == y) continue;
 
             let mirrorCoords = getMirrorCoords(x, y);
-
             if(!cellMatrix[mirrorCoords.x][mirrorCoords.y].isDead) count++;
         }
     }
@@ -361,13 +369,11 @@ function patternToSVG(size = 24, color = '#ffffff', path) {
 
     for(let i = 0; i < path.length; i++) {
         let rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-
         rect.setAttribute('x', centerCell.x + (path[i][0] * iconCellSize));
         rect.setAttribute('y', centerCell.y + (path[i][1] * iconCellSize));
         rect.setAttribute('width', iconCellSize);
         rect.setAttribute('height', iconCellSize);
         rect.setAttribute('fill', color);   
-
         svg.appendChild(rect);
     }
 
@@ -375,8 +381,7 @@ function patternToSVG(size = 24, color = '#ffffff', path) {
 }
 
 function setPaintPattern(event) {
-    let attrPattern = event.currentTarget.getAttribute('data-paint-pattern');    
-
+    let attrPattern = event.currentTarget.getAttribute('data-paint-pattern');
     paintPattern = parsePattern(attrPattern);
     patternButtons.map((b) => b.setAttribute('data-pattern-checked', false));
     event.currentTarget.setAttribute('data-pattern-checked', true);
