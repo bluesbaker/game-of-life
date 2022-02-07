@@ -75,13 +75,15 @@ window.addEventListener('DOMContentLoaded', loadTools);
 init();
 
 function init() {
+    if(!+sizeInput.value) return;
+
     // resize by current window
     for(let i = 0; i < layouts.length; i++) {
         layouts[i].width = getGameBlockSize();
         layouts[i].height = getGameBlockSize();
     }
 
-    gridSize = +sizeInput.value || 100;
+    gridSize = +sizeInput.value;
     cellSize = overlapLayout.width / gridSize;
 
     // init virgin matrix
