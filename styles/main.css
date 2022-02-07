@@ -71,10 +71,6 @@ body {
     gap: 5px;
 }
 
-.tools-line .pattern.active {
-    background: linear-gradient(-45deg, rgb(206, 117, 0), rgb(223, 171, 1));
-}
-
 .layout {
     position: absolute;
 }
@@ -111,6 +107,11 @@ body {
 .field:invalid {
     background: linear-gradient(rgb(192, 71, 97), rgb(255, 108, 140));
     color: #fff;
+}
+
+.field:invalid ~ .btn[value='BUILD'] {
+    opacity: 0.5;
+    cursor: default;
 }
 
 .btn {

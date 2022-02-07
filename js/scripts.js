@@ -164,13 +164,6 @@ function inputSize(event) {
     let input = event.target;
     let regex = /[^+\d]/g;   
     input.value = input.value.replace(regex, '');
-
-    if(input.value == '') {
-        buildButton.disabled = true;
-    }
-    else {
-        buildButton.disabled = false;
-    }
 }
 
 function startGame() {
