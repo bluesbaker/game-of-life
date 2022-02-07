@@ -173,7 +173,7 @@ function drawMatrix() {
 }
 
 function inputSize(event) {
-    input.value = event.target.value.replace(/[^+\d]/g, '');
+    event.target.value = event.target.value.replace(/[^+\d]/g, '');
 }
 
 function startGame() {
