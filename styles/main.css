@@ -1,39 +1,69 @@
 :root {
+    /* sizes */
     --input-size: 50px;
+
+    /* main colors */
+    --text-color: rgba(255, 255, 255, 0.9);
+    --text-color--disabled: rgba(255, 255, 255, 0.5);
+    --shadow-color: rgba(0, 0, 0, .2);
+
+    /* colors */
+    --purple-color: rgb(120, 40, 205);
+    --orange-color: rgb(220, 125, 5);
+    --green-color: rgb(125, 160, 20);
+    --pink-color: rgb(215, 70, 105);
+    --gray-color: rgb(130, 130, 130);
 }
 
-body {
+html {
     display: flex;
-    color: #000;
-    padding: 0;
-    margin: 0;
-    height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.game-block {
-    display: flex;
-    position: relative;
-    flex-grow: 1;
-    background: rgb(155, 0, 220);
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-
-.game-block::before {
-    top: 0;
-    content: '';
-    background: linear-gradient(rgb(70, 0, 120), rgb(155, 0, 220));
     width: 100%;
     height: 100%;
 }
 
+body {
+    flex-grow: 1;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #222;
+}
+
+/* main block */
+#gameContainer {
+    flex-grow: 1;
+    display: flex;
+    position: relative;
+    background: var(--purple-color);
+    overflow-y: hidden;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+#gameLayout {
+    z-index: 0;
+}
+
+#overlapLayout {
+    z-index: 1;
+}
+
+#gridLayout {
+    z-index: 2;
+}
+
+.layout {
+    position: absolute;
+}
+
+/* right block */
 .right-bar {
+    flex-grow: 0;
     display: flex;
     flex-direction: column;  
-    background: #222;
     text-align: center;
-    text-transform: uppercase;
     color: #fff;
 }
 
@@ -41,48 +71,71 @@ body {
     flex-grow: 0;
     padding: 20px;
     font-size: 130%;
+    text-transform: uppercase;
+    text-shadow: 0 2px 0px var(--purple-color);
 }
 
-.footer-block {
-    flex-grow: 0;
-    padding: 20px;
-    background: #444;
-}
-
-.footer-block a {
-    color: rgb(223, 171, 1);
-    text-decoration: none;
-}
-
-.options-block, .tools-block {
+.options-block {
     display: flex;
     padding: 20px;
     padding-top: 0px;
-    color: #fff;
+    color: var(--text-color);
     flex-direction: column;
+}
+
+.options-line {
+    display: flex;
+    gap: 5px;
 }
 
 .tools-block {
     flex-grow: 1;
 }
 
-.tools-line {
+.repo-block {
+    flex-grow: 0;
     display: flex;
-    gap: 5px;
+    flex-direction: row;
+    background: #444;
+    padding: 10px 20px;
 }
 
-.layout {
-    position: absolute;
+.repo-block .repo-info {
+    display: flex;
+    flex-direction: column;
+    font-size: 90%;
+    justify-content: center;
+    align-items: flex-start;
 }
 
-#gameLayout {
-    z-index: 1;
+.repo-block .repo-description {
+    font-size: 70%;
+    opacity: 0.5;
 }
 
-#overlapLayout {
-    z-index: 2;
+.repo-block .user-avatar {
+    width: var(--input-size);
+    height: var(--input-size);
+    border-radius: 10px;
+    border-top: 2px solid #00000000;
+    margin-right: 10px;
 }
 
+.repo-block .user-avatar[src=""] {
+    /* empty image */
+    content:url("data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");
+    border-radius: 50%;
+    border-top: 2px solid var(--orange-color);
+    animation: spinner 0.5s linear infinite;
+}
+
+.repo-block .link {
+    color: var(--orange-color);
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+/* inputs */
 .field, .btn {
     flex-grow: 1;
     display: flex;
@@ -90,7 +143,7 @@ body {
     justify-content: center;
     border-radius: 5px;
     margin: 5px 0px;
-    border: 1px solid #999;
+    border: 0;
     text-transform: uppercase;
     height: var(--input-size);
     max-width: calc((var(--input-size) * 3) + (5px * 2));
@@ -99,47 +152,83 @@ body {
 }
 
 .field {
+    font-size: 130%;
     padding: 0px 10px;
     margin-bottom: 2px;
     outline-style: none;
+    border-top: 3px solid var(--shadow-color);
+    padding-bottom: 3px;
 }
 
 .field:invalid {
-    background: linear-gradient(rgb(192, 71, 97), rgb(255, 108, 140));
-    color: #fff;
-}
-
-.field:invalid ~ .btn[value='BUILD'] {
-    opacity: 0.5;
-    cursor: default;
+    background: var(--pink-color);
+    color: var(--text-color);
 }
 
 .btn {
     border: 0px;
     cursor: pointer;
-    transition: all 1s;
+    transition: all 0.3s;
     margin: 2.5px 0px;
-    color: #fff;
-    background: linear-gradient(-45deg, rgb(70, 0, 120), rgb(155, 0, 220));
+    color: var(--text-color);
+    background: var(--purple-color);
+    border-bottom: 3px solid var(--shadow-color);
+    text-shadow: -1px -1px 0px var(--shadow-color);
+    font-size: 100%;
 }
 
-.btn:disabled {
-    opacity: 0.5;
-    cursor: default;
+.btn.pattern:empty {
+    opacity: 0;
 }
 
-.btn[value='BUILD'] {
-    background: linear-gradient(-45deg, rgb(206, 117, 0), rgb(223, 171, 1));
+.btn.btn-build {
+    background: var(--orange-color);
 }
 
-.btn[value='START'] {
-    background: linear-gradient(-45deg, rgb(103, 114, 2), rgb(150, 200, 0));
+.btn.btn-start {
+    background: var(--green-color);
 }
 
-.btn[value='PAUSE'] {
-    background: linear-gradient(-45deg, rgb(192, 71, 97), rgb(255, 108, 140));
+.btn.btn-pause {
+    background: var(--orange-color);
+}
+
+.btn.btn-stop {
+    background: var(--pink-color);
 }
 
 .btn[data-pattern-checked=true] {
-    background: linear-gradient(-45deg, rgb(206, 117, 0), rgb(223, 171, 1));
+    background: var(--orange-color);
+}
+
+.btn svg {
+    filter: drop-shadow(-1px -1px 0px var(--shadow-color));
+}
+
+.btn path, .btn rect{
+    fill: var(--text-color);
+}
+
+.btn:disabled path, .btn:disabled rect{
+    fill: var(--text-color--disabled);
+}
+
+.btn:active {
+    border-bottom: 0 solid #00000000;
+}
+
+.btn:disabled {
+    color: var(--text-color--disabled);
+    background: var(--gray-color);
+    cursor: default;
+}
+
+/* animations */
+@keyframes spinner {
+    0% { 
+        transform: rotate(0deg); 
+    }
+    100% { 
+        transform: rotate(360deg); 
+    }  
 }

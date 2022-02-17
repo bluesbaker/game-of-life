@@ -5,54 +5,82 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=800, initial-scale=1.0">
     <meta charset="utf-8">
+    <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="styles/main.css">
+    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="./js/about.js"></script>
     <title>Game of Life</title>
 </head>
 <body>
     <!-- GAME -->
-    <article class="game-block">
-        <canvas class="layout" id="overlapLayout"></canvas>
+    <article id="gameContainer">
         <canvas class="layout" id="gameLayout"></canvas>
+        <canvas class="layout" id="overlapLayout"></canvas>
         <canvas class="layout" id="gridLayout"></canvas>
     </article>
 
-    <!-- OPTION -->
+    <!-- RIGHT BAR -->
     <div class="right-bar">
         <article class="title-block">
             Game of Life
-        </article>    
-        <article class="options-block">
-            <input class="field" type="text" value="100" id="sizeInput" placeholder="grid size" required>
-            <input class="btn" type="button" value="BUILD" id="buildButton">
-            <input class="btn" type="button" value="START" id="startButton">
-            <input class="btn" type="button" value="CLEAR" id="clearButton">
         </article>
-        <article class="tools-block">
-            <div class="tools-line">
-                <input class="btn" type="button" value="Randomize" id="randomizeButton">
+        <!-- OPTIONS -->    
+        <article class="options-block">
+            <input class="field" type="text" value="100" id="axisInput" placeholder="axis size" required>
+            <input class="btn btn-build" type="button" value="BUILD" id="buildButton">
+            <div class="options-line">
+                <button class="btn btn-start" type="button" id="startButton">
+                    <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 0 L16 9 L2 18"/>
+                    </svg>
+                </button>
+                <button class="btn btn-pause" type="button" id="pauseButton">
+                    <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0" y="0" width="6" height="18"/>
+                        <rect x="12" y="0" width="6" height="18"/>
+                    </svg>
+                </button>
+                <button class="btn btn-stop" type="button" id="stopButton">
+                    <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0" y="0" width="18" height="18"/>
+                    </svg>
+                </button>
             </div>
-            <div class="tools-line">
+        </article>
+
+        <!-- TOOLS -->
+        <article class="options-block tools-block">
+            <div class="options-line">
+                <button class="btn" type="button" id="randomizeButton">RANDOMIZE</button>
+            </div>
+            <div class="options-line">
                 <button class="btn pattern" data-pattern-checked="true" data-paint-pattern="0,0"></button> 
                 <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;0,-1;0,1"></button>
                 <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;-1,0;1,0"></button>
             </div>
-            <div class="tools-line">
+            <div class="options-line">
                 <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;-1,-1;1,1"></button> 
                 <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;-1,0;1,0;0,-1;0,1"></button>
                 <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;-1,1;1,-1"></button>
             </div>
-            <div class="tools-line">
+            <div class="options-line">
                 <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="-1,0;1,0"></button> 
                 <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,0;-1,-1;-1,1;1,-1;1,1"></button>
                 <button class="btn pattern" data-pattern-checked="false" data-paint-pattern="0,-1;0,1"></button>
             </div>
         </article>
-        <footer class="footer-block">
-            <a href="https://github.com/bluesbaker/js-game-of-life">GITHUB</a>
+
+        <!-- GITHUB INFO -->
+        <footer class="repo-block">
+            <img class="user-avatar" src="" title="User avatar from github">
+            <article class="repo-info">
+                <a href="https://github.com/bluesbaker/js-game-of-life" 
+                    class="link" 
+                    title="Source code on github">github.com</a>
+                <span class="repo-description">upd: ...</span>
+                <span class="repo-description">ver: 1.2.2</span>
+            </article>
         </footer>
     </div>
-
-    <!-- GAME SCRIPTS -->
-    <script src="js/scripts.js"></script>
 </body>
 </html>
