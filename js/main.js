@@ -1,5 +1,5 @@
-import { Grid } from './modals/Grid.js';
-import { Game } from './modals/Game.js';
+import { Grid } from './modules/Grid.js';
+import { Game } from './modules/Game.js';
 import { addListener, removeListener } from './tools/eventListener.js';
 import { parsePattern, patternToSVG } from './tools/patternTools.js';
 
